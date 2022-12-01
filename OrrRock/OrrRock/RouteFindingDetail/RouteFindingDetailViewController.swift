@@ -113,6 +113,10 @@ class RouteFindingDetailViewController: UIViewController {
         thumbnailCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.isToolbarHidden = true
+    }
+    
     // MARK: Functions
     
     // 네비게이션바 세팅 함수
@@ -151,7 +155,7 @@ class RouteFindingDetailViewController: UIViewController {
         var routeViewControllers: [RouteViewController] = []
         
         routeDataDraft.routeInfoForUI.pages.forEach { pageInfo in
-            routeViewControllers.append(RouteViewController(pageInfo: pageInfo, backgroundImage: routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail()!))
+            routeViewControllers.append(RouteViewController(pageInfo: pageInfo, backgroundImage: routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail(targetSize: CGSize(width: 2400, height: 2400))!))
         }
         
         return routeViewControllers
@@ -183,7 +187,7 @@ class RouteFindingDetailViewController: UIViewController {
     }
     
     @objc func editAction() {
-        guard let image = routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail() else { return }
+        guard let image = routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail(targetSize: CGSize(width: 2400, height: 2400)) else { return }
         
         let featureVC = RouteFindingFeatureViewController(routeDataDraft: routeDataDraft, backgroundImage: image)
         
