@@ -196,7 +196,6 @@ class VideoDetailViewController: UIViewController {
     // 완료 버튼을 눌렀을 때 로직
     @objc func completeAction() {
         //TODO: 피드백 입력 구현 마무리
-        
         feedbackText = videoInfoView.feedbackTextView.text!
         DataManager.shared.updateFeedback(videoInformation: currentVideoInformation!, feedback: feedbackText!)
         self.view.endEditing(true)
@@ -305,7 +304,7 @@ extension VideoDetailViewController {
             $0.top.equalTo(self.view)
             $0.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.top)
         }
-        // 하단 safe area를 가려주는 뷰
+//         하단 safe area를 가려주는 뷰
         view.addSubview(bottomSafeAreaView)
         bottomSafeAreaView.snp.makeConstraints {
             $0.leading.equalTo(self.view)
