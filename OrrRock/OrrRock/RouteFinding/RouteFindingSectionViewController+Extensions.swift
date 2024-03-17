@@ -69,7 +69,7 @@ extension RouteFindingSectionViewController: UICollectionViewDataSource {
             routeFindingCollectionView.deselectItem(at: indexPath, animated: true)
             //화면이동 로직 들어갈 부분
             let index = indexPath.row
-            guard let route = routeFindingDataManager?.getRouteFindingList()[index] else { return }
+            let route = routeInformations[index]
 
             let routeDataDraft = RouteDataDraft(manager: routeFindingDataManager!, existingRouteFinding: route, imageLocalIdentifier: route.imageLocalIdentifier)
             let vc = RouteFindingDetailViewController(routeDataDraft: routeDataDraft)
@@ -222,9 +222,9 @@ extension RouteFindingSectionViewController: RouteModalDelegate {
         case .delete:
             showToast("\(dictionarySelectedIndexPath.count)개의 루트 파인딩을 삭제했습니다.", withDuration: 1.0, delay: 1.0)
         case .toChallenge:
-            showToast("\(dictionarySelectedIndexPath.count)개의 루트 파인딩이 '도전 중'으로 이동했습니다.", withDuration: 1.0, delay: 0.0)
+            showToast("\(dictionarySelectedIndexPath.count)개의 루트 파인딩이 '도전 중'으로 이동했습니다.", withDuration: 1.0, delay: 1.0)
         case .toSuccess:
-            showToast("\(dictionarySelectedIndexPath.count)개의 루트 파인딩이 '도전 성공'으로 이동했습니다.", withDuration: 1.0, delay: 0.1)
+            showToast("\(dictionarySelectedIndexPath.count)개의 루트 파인딩이 '도전 성공'으로 이동했습니다.", withDuration: 1.0, delay: 1.0)
         }
         backToDefaultRouteFindingSectionViewSetting()
     }

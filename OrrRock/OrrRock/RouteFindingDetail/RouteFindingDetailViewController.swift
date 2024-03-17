@@ -45,8 +45,6 @@ class RouteFindingDetailViewController: UIViewController {
     private lazy var routePageViewController: UIPageViewController = {
         let pageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal)
         pageViewController.view.backgroundColor = .black
-        
-        pageViewController.setViewControllers([RouteViewController(pageInfo: routeDataDraft.routeInfoForUI.pages[0], backgroundImage: routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail()!)], direction: .forward, animated: true)
         pageViewController.isPagingEnabled = false
         return pageViewController
     }()
@@ -83,10 +81,8 @@ class RouteFindingDetailViewController: UIViewController {
         setUpCollectionView()
         addUIGesture()
         
-        loadPageViewControllerList()
         let tapgesture = UITapGestureRecognizer(target: self, action: #selector(respondToTapGesture(_:)))
         view.addGestureRecognizer(tapgesture)
-        
     }
     
     required init?(coder: NSCoder) {
@@ -113,7 +109,7 @@ class RouteFindingDetailViewController: UIViewController {
         self.thumbnailCollectionView.contentInset = UIEdgeInsets(top: 0, left: sideInset, bottom: 0, right: sideInset)
         
         // 뷰가 올라오면 가장 처음 페이지로 이동
-        thumbnailCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
+        thumbnailCollectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: true)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -153,9 +149,8 @@ class RouteFindingDetailViewController: UIViewController {
     
     func getViewControllerForPageVC() -> [RouteViewController] {
         var routeViewControllers: [RouteViewController] = []
-        
         routeDataDraft.routeInfoForUI.pages.forEach { pageInfo in
-            routeViewControllers.append(RouteViewController(pageInfo: pageInfo, backgroundImage: routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail(targetSize: CGSize(width: 2400, height: 2400))!))
+            routeViewControllers.append(RouteViewController(pageInfo: pageInfo, backgroundImage: routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail(targetSize: CGSize(width: 2400, height: 2400))))
         }
         
         return routeViewControllers
@@ -189,7 +184,7 @@ class RouteFindingDetailViewController: UIViewController {
     @objc func editAction() {
         guard let image = routeDataDraft.routeInfoForUI.imageLocalIdentifier.generateCardViewThumbnail(targetSize: CGSize(width: 2400, height: 2400)) else { return }
         
-        let featureVC = RouteFindingFeatureViewController(routeDataDraft: routeDataDraft, backgroundImage: image)
+        let featureVC = RouteFindingFeatureViewController(routeDataDraft: routeDataDraft, backgroundImage: image, isCreateMode: false)
         
         featureVC.modalPresentationStyle = .fullScreen
         navigationController?.present(featureVC, animated: true)
@@ -204,12 +199,12 @@ class RouteFindingDetailViewController: UIViewController {
     
     // 삭제 버튼을 눌렀을 때 로직
     @objc func deleteVideoAction(_ sender: UIBarButtonItem) {
-        let optionMenu = UIAlertController(title: "선택한 영상 삭제하기", message: "정말로 삭제하시겠어요?", preferredStyle: .actionSheet)
-        let deleteAction = UIAlertAction(title: "삭제하기", style: .destructive) {_ in
+        let optionMenu = UIAlertController(title: "선택한 루트 파인딩 삭제하기", message: "정말로 삭제하시겠어요?", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "삭제", style: .destructive) {_ in
             self.routeDataDraft.routeDataManager.deleteRouteData(routeInformation: self.routeDataDraft.route!)
             self.goBackAction()
         }
-        let cancelAction = UIAlertAction(title: "취소하기", style: .cancel)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel)
         
         optionMenu.addAction(deleteAction)
         optionMenu.addAction(cancelAction)
@@ -292,7 +287,6 @@ extension RouteFindingDetailViewController {
         viewControllerListForPageVC = getViewControllerForPageVC()
         routePageViewController.setViewControllers([viewControllerListForPageVC.first!], direction: .forward, animated: true)
         thumbnailCollectionView.reloadData()
-        
     }
     
     private func setUpCollectionView() {
